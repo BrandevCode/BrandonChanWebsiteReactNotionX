@@ -10,11 +10,11 @@ export default siteConfig({
 
   // basic site info (required)
   name: 'Brandon Starter Kit',
-  domain: 'nextjs-notion-starter-kit.transitivebullsh.it',
+  domain: 'brandonchan.ca',
   author: 'Brandon Chan',
 
   // open graph metadata (optional)
-  description: 'TODO Example Next.js Notion Starter Kit Site',
+  description: '',
 
   // social usernames (optional)
   // twitter: 'transitive_bs',
