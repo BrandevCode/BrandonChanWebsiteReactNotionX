@@ -1,7 +1,6 @@
 import {
   getAllPagesInSpace,
-  getPageProperty,
-  uuidToId
+  getPageProperty
 } from 'notion-utils'
 import pMemoize from 'p-memoize'
 

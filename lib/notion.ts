@@ -80,7 +80,7 @@ export async function getPage(pageId: string): Promise<ExtendedRecordMap> {
         throw err
       }
 
-      const delay = Math.min(30000, Math.pow(2, attempt) * 1000 + Math.random() * 1000)
+      const delay = Math.min(30_000, Math.pow(2, attempt) * 1000 + Math.random() * 1000)
       console.warn(`notion.getPage ${pageId} attempt ${attempt} failed (${err.message}). retrying in ${delay}ms`)
       await new Promise((r) => setTimeout(r, delay))
     }
