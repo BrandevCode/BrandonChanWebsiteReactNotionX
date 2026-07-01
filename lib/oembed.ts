@@ -1,4 +1,5 @@
-import { getBlockValue, getPageTitle, parsePageId } from 'notion-utils'
+import { getPageTitle, parsePageId } from 'notion-utils'
+import { getBlockValue } from './notion-helpers'
 
 import * as config from './config'
 import { getPage } from './notion'

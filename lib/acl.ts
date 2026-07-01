@@ -1,4 +1,4 @@
-import { getBlockValue } from 'notion-utils'
+import { getBlockValue } from './notion-helpers'
 
 import type { PageProps } from './types'
 

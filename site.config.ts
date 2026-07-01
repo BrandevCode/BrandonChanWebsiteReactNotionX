@@ -10,11 +10,11 @@ export default siteConfig({
 
   // basic site info (required)
   name: 'Brandon Starter Kit',
-  domain: 'brandonchan.ca',
+  domain: 'nextjs-notion-starter-kit.transitivebullsh.it',
   author: 'Brandon Chan',
 
   // open graph metadata (optional)
-  description: '',
+  description: 'TODO Example Next.js Notion Starter Kit Site',
 
   // social usernames (optional)
   // twitter: 'transitive_bs',
@@ -22,7 +22,7 @@ export default siteConfig({
   linkedin: 'brandonmchan',
   // mastodon: '#', // optional mastodon profile URL, provides link verification
   // newsletter: '#', // optional newsletter URL
-  youtube: '@BranChan', // optional youtube channel name or `channel/UCGbXXXXXXXXXXXXXXXXXXXXXX`
+  youtube: '@BranGameDev', // optional youtube channel name or `channel/UCGbXXXXXXXXXXXXXXXXXXXXXX`
 
   // default notion icon and cover images for site-wide consistency (optional)
   // page-specific values will override these site-wide defaults
@@ -56,6 +56,10 @@ export default siteConfig({
     {
       title: 'About',
       pageId: '2a565dcc042980bbaeece3fe87046d0a'
+    },
+    {
+      title: 'Contact',
+      pageId: '6a29ebcb935a4f0689fe661ab5f3b8d1'
     }
   ]
 })

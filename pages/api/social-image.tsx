@@ -5,11 +5,11 @@ import { type PageBlock } from 'notion-types'
 import {
   getBlockIcon,
   getBlockTitle,
-  getBlockValue,
   getPageProperty,
   isUrl,
   parsePageId
 } from 'notion-utils'
+import { getBlockValue } from '@/lib/notion-helpers'
 
 import * as libConfig from '@/lib/config'
 import interSemiBoldFont from '@/lib/fonts/inter-semibold'

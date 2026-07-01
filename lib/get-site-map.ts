@@ -1,9 +1,9 @@
 import {
   getAllPagesInSpace,
-  getBlockValue,
   getPageProperty,
   uuidToId
 } from 'notion-utils'
+import { getBlockValue } from './notion-helpers'
 import pMemoize from 'p-memoize'
 
 import type * as types from './types'

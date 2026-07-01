@@ -3,10 +3,10 @@ import { type ExtendedRecordMap } from 'notion-types'
 import {
   getBlockParentPage,
   getBlockTitle,
-  getBlockValue,
   getPageProperty,
   idToUuid
 } from 'notion-utils'
+import { getBlockValue } from '@/lib/notion-helpers'
 import RSS from 'rss'
 
 import * as config from '@/lib/config'

@@ -7,7 +7,6 @@ import { type PageBlock } from 'notion-types'
 import {
   formatDate,
   getBlockTitle,
-  getBlockValue,
   getPageProperty
 } from 'notion-utils'
 import * as React from 'react'
@@ -22,6 +21,7 @@ import { useSearchParam } from 'react-use'
 
 import type * as types from '@/lib/types'
 import * as config from '@/lib/config'
+import { getBlockValue } from '@/lib/notion-helpers'
 import { mapImageUrl } from '@/lib/map-image-url'
 import { getCanonicalPageUrl, mapPageUrl } from '@/lib/map-page-url'
 import { searchNotion } from '@/lib/search-notion'
