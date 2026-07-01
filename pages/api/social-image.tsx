@@ -9,12 +9,12 @@ import {
   isUrl,
   parsePageId
 } from 'notion-utils'
-import { getBlockValue } from '@/lib/notion-helpers'
 
 import * as libConfig from '@/lib/config'
 import interSemiBoldFont from '@/lib/fonts/inter-semibold'
 import { mapImageUrl } from '@/lib/map-image-url'
 import { notion } from '@/lib/notion-api'
+import { getBlockValue } from '@/lib/notion-helpers'
 import { type NotionPageInfo, type PageError } from '@/lib/types'
 
 export const runtime = 'edge'

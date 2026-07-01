@@ -6,13 +6,13 @@ import {
   getPageProperty,
   idToUuid
 } from 'notion-utils'
-import { getBlockValue } from '@/lib/notion-helpers'
 import RSS from 'rss'
 
 import * as config from '@/lib/config'
 import { getSiteMap } from '@/lib/get-site-map'
 import { getSocialImageUrl } from '@/lib/get-social-image-url'
 import { getCanonicalPageUrl } from '@/lib/map-page-url'
+import { getBlockValue } from '@/lib/notion-helpers'
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   if (req.method !== 'GET') {

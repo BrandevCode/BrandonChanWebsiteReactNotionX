@@ -3,7 +3,6 @@ import {
   getPageProperty,
   uuidToId
 } from 'notion-utils'
-import { getBlockValue } from './notion-helpers'
 import pMemoize from 'p-memoize'
 
 import type * as types from './types'
@@ -11,6 +10,7 @@ import * as config from './config'
 import { includeNotionIdInUrls } from './config'
 import { getCanonicalPageId } from './get-canonical-page-id'
 import { notion } from './notion-api'
+import { getBlockValue } from './notion-helpers'
 
 const uuid = !!includeNotionIdInUrls
 
