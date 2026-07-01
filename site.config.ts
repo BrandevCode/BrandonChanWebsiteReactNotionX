@@ -9,7 +9,7 @@ export default siteConfig({
   rootNotionSpaceId: null,
 
   // basic site info (required)
-  name: 'Brandon Starter Kit',
+  name: 'BranChan',
   domain: 'nextjs-notion-starter-kit.transitivebullsh.it',
   author: 'Brandon Chan',
 

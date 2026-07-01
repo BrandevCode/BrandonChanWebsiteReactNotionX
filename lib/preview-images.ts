@@ -43,6 +43,12 @@ async function createPreviewImage(
   { cacheKey }: { cacheKey: string }
 ): Promise<PreviewImage | null> {
   try {
+    // Skip GIFs and other animated formats that lqip doesn't support well
+    if (/\.(gif|webp|svg)$/i.test(url)) {
+      console.log('skipping preview image for unsupported format', url)
+      return null
+    }
+
     try {
       const cachedPreviewImage = await db.get(cacheKey)
       if (cachedPreviewImage) {

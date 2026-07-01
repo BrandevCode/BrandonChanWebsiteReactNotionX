@@ -172,7 +172,9 @@ export async function getNotionPageInfo({
   | { type: 'success'; data: NotionPageInfo }
   | { type: 'error'; error: PageError }
 > {
-  const recordMap = await notion.getPage(pageId)
+  const recordMap = await notion.getPage(pageId, {
+    signFileUrls: true
+  })
 
   const keys = Object.keys(recordMap?.block || {})
   const block = getBlockValue(recordMap?.block?.[keys[0]!])
