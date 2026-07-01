@@ -15,7 +15,6 @@ import {
 import { getTweetsMap } from './get-tweets'
 import { notion } from './notion-api'
 import { getPreviewImageMap } from './preview-images'
-import { signFileUrlsInRecordMap } from './sign-file-urls'
 
 const getNavigationLinkPages = pMemoize(
   async (): Promise<ExtendedRecordMap[]> => {
@@ -51,9 +50,6 @@ export async function getPage(pageId: string): Promise<ExtendedRecordMap> {
       let recordMap = await notion.getPage(pageId, {
         signFileUrls: true
       })
-
-      // Sign any remaining attachment URLs that weren't converted by the API
-      recordMap = await signFileUrlsInRecordMap(recordMap)
 
       if (navigationStyle !== 'default') {
         // ensure that any pages linked to in the custom navigation header have

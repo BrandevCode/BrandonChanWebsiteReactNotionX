@@ -15,7 +15,6 @@ import interSemiBoldFont from '@/lib/fonts/inter-semibold'
 import { mapImageUrl } from '@/lib/map-image-url'
 import { notion } from '@/lib/notion-api'
 import { getBlockValue } from '@/lib/notion-helpers'
-import { signFileUrlsInRecordMap } from '@/lib/sign-file-urls'
 import { type NotionPageInfo, type PageError } from '@/lib/types'
 
 export const runtime = 'edge'
@@ -63,19 +62,6 @@ export default async function OGImage(
             width: '100%',
             height: '100%',
             objectFit: 'cover'
-            // TODO: satori doesn't support background-size: cover and seems to
-            // have inconsistent support for filter + transform to get rid of the
-            // blurred edges. For now, we'll go without a blur filter on the
-            // background, but Satori is still very new, so hopefully we can re-add
-            // the blur soon.
-
-            // backgroundImage: pageInfo.image
-            //   ? `url(${pageInfo.image})`
-            //   : undefined,
-            // backgroundSize: '100% 100%'
-            // TODO: pageInfo.imageObjectPosition
-            // filter: 'blur(8px)'
-            // transform: 'scale(1.05)'
           }}
         />
       )}
@@ -144,7 +130,6 @@ export default async function OGImage(
             style={{
               width: '100%',
               height: '100%'
-              // transform: 'scale(1.04)'
             }}
           />
         </div>
@@ -173,12 +158,9 @@ export async function getNotionPageInfo({
   | { type: 'success'; data: NotionPageInfo }
   | { type: 'error'; error: PageError }
 > {
-  let recordMap = await notion.getPage(pageId, {
+  const recordMap = await notion.getPage(pageId, {
     signFileUrls: true
   })
-
-  // Sign any remaining attachment URLs
-  recordMap = await signFileUrlsInRecordMap(recordMap)
 
   const keys = Object.keys(recordMap?.block || {})
   const block = getBlockValue(recordMap?.block?.[keys[0]!])
@@ -203,8 +185,6 @@ export async function getNotionPageInfo({
     }
   }
 
-  const isBlogPost =
-    block.type === 'page' && block.parent_table === 'collection'
   const title = getBlockTitle(block, recordMap) || libConfig.name
 
   const imageCoverPosition =
@@ -227,6 +207,7 @@ export async function getNotionPageInfo({
     block
   )
   const authorImageFallbackUrl = mapImageUrl(libConfig.defaultPageIcon, block)
+
   const [authorImage, image] = await Promise.all([
     getCompatibleImageUrl(authorImageBlockUrl, authorImageFallbackUrl),
     getCompatibleImageUrl(imageBlockUrl, imageFallbackUrl)
@@ -235,49 +216,21 @@ export async function getNotionPageInfo({
   const author =
     getPageProperty<string>('Author', block, recordMap) || libConfig.author
 
-  // const socialDescription =
-  //   getPageProperty<string>('Description', block, recordMap) ||
-  //   libConfig.description
-
-  // const lastUpdatedTime = getPageProperty<number>(
-  //   'Last Updated',
-  //   block,
-  //   recordMap
-  // )
-  const publishedTime = getPageProperty<number>('Published', block, recordMap)
-  const datePublished = publishedTime ? new Date(publishedTime) : undefined
-  // const dateUpdated = lastUpdatedTime
-  //   ? new Date(lastUpdatedTime)
-  //   : publishedTime
-  //   ? new Date(publishedTime)
-  //   : undefined
-  const date =
-    isBlogPost && datePublished
-      ? `${datePublished.toLocaleString('en-US', {
-          month: 'long'
-        })} ${datePublished.getFullYear()}`
-      : undefined
-  const detail = date || author || libConfig.domain
-
-  const pageInfo: NotionPageInfo = {
-    pageId,
-    title,
-    image,
-    imageObjectPosition,
-    author,
-    authorImage,
-    detail
-  }
-
   return {
     type: 'success',
-    data: pageInfo
+    data: {
+      pageId,
+      title,
+      detail: undefined,
+      image,
+      authorImage,
+      author,
+      imageObjectPosition
+    }
   }
 }
 
-async function isUrlReachable(
-  url: string | undefined | null
-): Promise<boolean> {
+async function isUrlReachable(url: string | undefined | null): Promise<boolean> {
   if (!url) {
     return false
   }
