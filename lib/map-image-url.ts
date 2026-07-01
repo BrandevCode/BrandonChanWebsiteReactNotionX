@@ -11,19 +11,12 @@ export const mapImageUrl = (url: string | undefined, block: any) => {
     return url
   }
 
-  // Ensure attachment URLs are properly converted through notion-utils
-  // which handles signing and converting attachment: URLs to accessible HTTPS URLs
-  const mapped = defaultMapImageUrl(url, block)
-
-  // Log if we're getting attachment: URLs in output (indicates a mapping issue)
-  if (mapped && mapped.startsWith('attachment:')) {
-    console.warn(
-      'Warning: attachment URL was not converted to HTTPS URL',
-      mapped,
-      'block:',
-      block?.id
-    )
+  // Let react-notion-x handle attachment: URLs directly
+  // It has built-in logic to convert them to signed Notion URLs
+  if (url.startsWith('attachment:')) {
+    return url
   }
 
-  return mapped
+  // For other URLs, use notion-utils mapping
+  return defaultMapImageUrl(url, block)
 }

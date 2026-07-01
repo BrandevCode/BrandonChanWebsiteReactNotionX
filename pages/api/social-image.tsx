@@ -15,6 +15,7 @@ import interSemiBoldFont from '@/lib/fonts/inter-semibold'
 import { mapImageUrl } from '@/lib/map-image-url'
 import { notion } from '@/lib/notion-api'
 import { getBlockValue } from '@/lib/notion-helpers'
+import { signFileUrlsInRecordMap } from '@/lib/sign-file-urls'
 import { type NotionPageInfo, type PageError } from '@/lib/types'
 
 export const runtime = 'edge'
@@ -172,9 +173,12 @@ export async function getNotionPageInfo({
   | { type: 'success'; data: NotionPageInfo }
   | { type: 'error'; error: PageError }
 > {
-  const recordMap = await notion.getPage(pageId, {
+  let recordMap = await notion.getPage(pageId, {
     signFileUrls: true
   })
+
+  // Sign any remaining attachment URLs
+  recordMap = await signFileUrlsInRecordMap(recordMap)
 
   const keys = Object.keys(recordMap?.block || {})
   const block = getBlockValue(recordMap?.block?.[keys[0]!])
