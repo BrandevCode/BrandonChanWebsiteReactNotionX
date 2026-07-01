@@ -43,31 +43,51 @@ const getNavigationLinkPages = pMemoize(
 )
 
 export async function getPage(pageId: string): Promise<ExtendedRecordMap> {
-  let recordMap = await notion.getPage(pageId)
+  const maxAttempts = 5
 
-  if (navigationStyle !== 'default') {
-    // ensure that any pages linked to in the custom navigation header have
-    // their block info fully resolved in the page record map so we know
-    // the page title, slug, etc.
-    const navigationLinkRecordMaps = await getNavigationLinkPages()
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      let recordMap = await notion.getPage(pageId)
 
-    if (navigationLinkRecordMaps?.length) {
-      recordMap = navigationLinkRecordMaps.reduce(
-        (map, navigationLinkRecordMap) =>
-          mergeRecordMaps(map, navigationLinkRecordMap),
-        recordMap
-      )
+      if (navigationStyle !== 'default') {
+        // ensure that any pages linked to in the custom navigation header have
+        // their block info fully resolved in the page record map so we know
+        // the page title, slug, etc.
+        const navigationLinkRecordMaps = await getNavigationLinkPages()
+
+        if (navigationLinkRecordMaps?.length) {
+          recordMap = navigationLinkRecordMaps.reduce(
+            (map, navigationLinkRecordMap) =>
+              mergeRecordMaps(map, navigationLinkRecordMap),
+            recordMap
+          )
+        }
+      }
+
+      if (isPreviewImageSupportEnabled) {
+        const previewImageMap = await getPreviewImageMap(recordMap)
+        ;(recordMap as any).preview_images = previewImageMap
+      }
+
+      await getTweetsMap(recordMap)
+
+      return recordMap
+    } catch (err: any) {
+      const is429 =
+        (err && err.message && err.message.includes('429')) || err?.status === 429
+
+      if (!is429 || attempt === maxAttempts) {
+        throw err
+      }
+
+      const delay = Math.min(30000, Math.pow(2, attempt) * 1000 + Math.random() * 1000)
+      console.warn(`notion.getPage ${pageId} attempt ${attempt} failed (${err.message}). retrying in ${delay}ms`)
+      await new Promise((r) => setTimeout(r, delay))
     }
   }
 
-  if (isPreviewImageSupportEnabled) {
-    const previewImageMap = await getPreviewImageMap(recordMap)
-    ;(recordMap as any).preview_images = previewImageMap
-  }
-
-  await getTweetsMap(recordMap)
-
-  return recordMap
+  // should never reach here
+  throw new Error('Failed to load page')
 }
 
 export async function search(params: SearchParams): Promise<SearchResults> {
