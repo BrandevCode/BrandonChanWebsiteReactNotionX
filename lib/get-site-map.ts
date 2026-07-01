@@ -62,7 +62,8 @@ async function getAllPagesImpl(
     (map: Record<string, string>, pageId: string) => {
       const recordMap = pageMap[pageId]
       if (!recordMap) {
-        throw new Error(`Error loading page "${pageId}"`)
+        console.warn(`Warning: skipping page "${pageId}" because it failed to load`)
+        return map
       }
 
       const block = getBlockValue(recordMap.block[pageId])

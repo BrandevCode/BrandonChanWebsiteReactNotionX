@@ -18,8 +18,14 @@ export const getStaticProps: GetStaticProps<PageProps, Params> = async (
   } catch (err) {
     console.error('page error', domain, rawPageId, err)
 
-    // we don't want to publish the error version of this page, so
-    // let next.js know explicitly that incremental SSG failed
+    // If Notion rate-limits or the page can't be loaded at build time,
+    // return `notFound` so the build can continue and Next serves a 404.
+    // This avoids build failures caused by transient Notion API errors.
+    if (process.env.NODE_ENV === 'production') {
+      return { notFound: true }
+    }
+
+    // In dev keep the error to aid debugging
     throw err
   }
 }
